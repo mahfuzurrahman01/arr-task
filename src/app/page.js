@@ -1,7 +1,11 @@
+import BillToggle from "@/components/BillToggle";
+import { Container } from "@/Style/style-component";
+
+
 export default function Home() {
   return (
-    <div>
-      
-    </div>
+    <Container>
+    <BillToggle />
+    </Container>
   );
 }
