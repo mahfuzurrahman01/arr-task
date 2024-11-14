@@ -2,4 +2,17 @@ body {
   padding: 0;
   margin: 0;
   background-color: #FCFBFE;
+  box-sizing: border-box;
+  
+}
+* {
+  box-sizing: border-box;
+  font-family: Rubik, sans-serif;
+  padding: 0;
+}
+
+:root {
+  --primary-color: #4cb3fd;
+  --secondary-color: #e5f2ff;
+  --primary-dark-color: #1884d1;
 }

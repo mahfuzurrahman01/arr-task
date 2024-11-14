@@ -1,11 +1,17 @@
 import BillToggle from "@/components/BillToggle";
-import { Container } from "@/Style/style-component";
-
+import FreePlan from "@/components/FreePlan";
+import { Container, PackageContainer } from "@/Style/style-component";
 
 export default function Home() {
   return (
     <Container>
-    <BillToggle />
+      <BillToggle />
+      <PackageContainer>
+        <FreePlan />
+        <FreePlan />
+        <FreePlan />
+        <FreePlan />
+      </PackageContainer>
     </Container>
   );
 }
