@@ -9,3 +9,14 @@ export const fetchData = async (packageName) => {
         console.error('Error fetching data:', error);
     }
 };
+export const fetchPlansInfo = async () => {
+
+    try {
+        const response = await fetch('/api/packages');
+        const data = await response.json();
+        console.log(data)
+        return data?.plansInfo;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+};

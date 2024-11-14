@@ -1,14 +1,34 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToggleButton, ToggleContainer, Divider, OfferButton } from "@/Style/style-component";
+import { fetchPlansInfo } from '@/utils/GetDataFunc';
 const BillToggle = () => {
     const [toggleState, setToggleState] = useState(0);
+    const [plansInfo, setPlansInfo] = useState({});
+    const getData = async () => {
+        const result = await fetchPlansInfo();
+        const plansArray = Object.values(result);
+        setPlansInfo(plansArray);
+    }
+    useEffect(() => {
+        getData();
+    }, []);
     return (
         <ToggleContainer>
-            <ToggleButton active={toggleState == 0} onClick={() => setToggleState(0)}>Billed monthly</ToggleButton>
-            <Divider></Divider>
-            <ToggleButton active={toggleState == 1} onClick={() => setToggleState(1)}>Billed yearly</ToggleButton>
-            <OfferButton>Save 20% 😍</OfferButton>
+            {plansInfo.length > 0 && plansInfo.map((plan, index) => (
+                <React.Fragment key={index}>
+                    <ToggleButton
+                        active={toggleState === index}
+                        onClick={() => setToggleState(index)}
+                    >
+                        {plan.title}
+                    </ToggleButton>
+                    {index < plansInfo.length - 1 && <Divider></Divider>}
+                    { plan.discount && (
+                        <OfferButton>{plan.discount}</OfferButton>
+                    )}
+                </React.Fragment>
+            ))}
         </ToggleContainer>
     );
 };
