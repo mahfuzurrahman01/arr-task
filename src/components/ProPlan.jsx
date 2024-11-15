@@ -1,19 +1,19 @@
 "use client"
-import { CustomIcon, FeaturesTitle, List, ListContainer, Marker, MarkerForList, PackageCard, PackageName, PriceText, SubmitButton, Title, TitleContent, ToolTipIcon, TooltipText, TooltipTextList, TooltipWrapper } from '@/Styles/style-component';
+import { CustomIcon, FeaturesTitle, List, ListContainer, Marker, MarkerForList, MostPopularBUtton, PackageCard, PackageName, PriceText, SubmitButton, Title, TitleContent, ToolTipIcon, TooltipText, TooltipTextList, TooltipWrapper } from '@/Styles/style-component';
 import { fetchData, fetchPlansFeature } from '@/utils/GetDataFunc';
 import React, { useEffect, useState } from 'react';
 
-const BasicPlan = () => {
+const ProPlan = () => {
     // ========================== store where we are storing our all data from json file =====================
 
-    const [basicPlan, setBasicPlan] = useState({});
+    const [proPlan, setProPlan] = useState({});
     const [features, setFeatures] = useState([]);
     const [hoveredIndex, setHoveredIndex] = useState(null); // Track the hovered list item index
     const [loader, setLoader] = useState(true);
 
     const getData = async () => {
-        const result = await fetchData("Basic");
-        setBasicPlan(result);
+        const result = await fetchData("Pro");
+        setProPlan(result);
         getFeature();
     }
 
@@ -34,15 +34,15 @@ const BasicPlan = () => {
     //  ============ as we have to add first feature dynamically so we will trigger this useEffect ===========
 
     useEffect(() => {
-        if (basicPlan?.title && features?.length > 0) {
-            const basicPlanTitle = basicPlan?.title;
-            const basicPlanText = basicPlan?.text;
-            const refinedTitle = basicPlanTitle.replace(/<\/?strong>/g, '');
+        if (proPlan?.title && features?.length > 0) {
+            const proPlanTitle = proPlan?.title;
+            const proPlanText = proPlan?.text;
+            const refinedTitle = proPlanTitle.replace(/<\/?strong>/g, '');
             // ========== new body for the feature =========
             const newBody = {
                 is_pro: '1',
                 feature_title: refinedTitle,
-                feature_desc: basicPlanText,
+                feature_desc: proPlanText,
             }
             features.unshift(newBody);
             setLoader(false);
@@ -74,18 +74,19 @@ const BasicPlan = () => {
     return (
         <div>
             {
-                basicPlan?.title && !loader && <PackageCard packageId="basic">
-                    <PackageName>{basicPlan?.name}</PackageName>
-                    <PriceText packageId="basic">{basicPlan?.price}</PriceText>
-                    <Title packageId="basic">
+                proPlan?.title && !loader && <PackageCard packageId="pro">
+                    <MostPopularBUtton>Most Popular</MostPopularBUtton>
+                    <PackageName>{proPlan?.name}</PackageName>
+                    <PriceText packageId="pro">{proPlan?.price}</PriceText>
+                    <Title packageId="pro">
                         <TitleContent
                             dangerouslySetInnerHTML={{
-                                __html: basicPlan?.title,
+                                __html: proPlan?.title,
                             }}
                         />
                         <ToolTipIcon onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}> <CustomIcon packageId="basic">i</CustomIcon>
-                            <TooltipText active={isHovered}>{basicPlan?.text}
+                            onMouseLeave={handleMouseLeave}> <CustomIcon packageId="pro">i</CustomIcon>
+                            <TooltipText active={isHovered}>{proPlan?.text}
                                 <Marker />
                             </TooltipText>
                         </ToolTipIcon>
@@ -113,11 +114,11 @@ const BasicPlan = () => {
                             ))
                         }
                     </ListContainer>
-                    <SubmitButton packageId="basic">Select Plan</SubmitButton>
+                    <SubmitButton packageId="pro">Select Plan</SubmitButton>
                 </PackageCard>
             }
         </div>
     );
 };
 
-export default BasicPlan;
+export default ProPlan;

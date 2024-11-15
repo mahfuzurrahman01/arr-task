@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { ToggleButton, ToggleContainer, Divider, OfferButton } from "@/Style/style-component";
+import { ToggleButton, ToggleContainer, Divider, OfferButton } from "@/Styles/style-component";
 import { fetchPlansInfo } from '@/utils/GetDataFunc';
 const BillToggle = () => {
     const [toggleState, setToggleState] = useState(0);
@@ -24,7 +24,7 @@ const BillToggle = () => {
                         {plan.title}
                     </ToggleButton>
                     {index < plansInfo.length - 1 && <Divider></Divider>}
-                    { plan.discount && (
+                    {plan.discount && (
                         <OfferButton>{plan.discount}</OfferButton>
                     )}
                 </React.Fragment>

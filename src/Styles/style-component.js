@@ -61,7 +61,7 @@ export const PackageCard = styled.div`
 background: #fff;
 border: 1px solid #eaeff2;
 border-radius: 8px;
-border-top: 8px solid ${(props) => props?.packageId == "free" && "var(--primary-color)" || props?.packageId == "basic" && "var(--primary-color-basic)"};
+border-top: 8px solid ${(props) => props?.packageId == "free" && "var(--primary-color)" || props?.packageId == "basic" && "var(--primary-color-basic)" || props?.packageId == "pro" && "var(--primary-color-pro)"};
 position:relative;
 height: 100%;
 padding: 24px 20px;
@@ -76,16 +76,16 @@ font-weight: 400;
 margin: 0px;
 `
 export const PriceText = styled.p`
-color: ${(props) => props?.packageId == 'free' && "var(--primary-color)" || props?.packageId == 'basic' && "var(--primary-color-basic)"};
+color: ${(props) => props?.packageId == 'free' && "var(--primary-color)" || props?.packageId == 'basic' && "var(--primary-color-basic)" || props?.packageId == "pro" && "var(--primary-color-pro)"};
 font-size: 32px;
 font-weight: 600;
 margin: 5px 0px 5px;
 }
 `
 export const Title = styled.button`
-background: ${(props) => props?.packageId == 'free' && "var(--secondary-color)" || props?.packageId == 'basic' && "var(--secondary-color-basic)"};;
+background: ${(props) => props?.packageId == 'free' && "var(--secondary-color)" || props?.packageId == 'basic' && "var(--secondary-color-basic)" || props?.packageId == "pro" && "var(--secondary-color-pro)"};;
 border-radius: 32px;
-color: ${(props) => props?.packageId == 'free' && "var(--primary-color)" || props?.packageId == 'basic' && "var(--primary-color-basic)"};;
+color: ${(props) => props?.packageId == 'free' && "var(--primary-color)" || props?.packageId == 'basic' && "var(--primary-color-basic)" || props?.packageId == "pro" && "var(--primary-color-pro)"};;
 font-size: 12.5px;
 display: flex;
 flex-direction: row;
@@ -164,8 +164,8 @@ export const CustomIcon = styled.span`
 width: 14.5px;
 height: 14.5px;
 border-radius: 100px;
-border: 1px solid ${(props) => props?.packageId == 'free' && "var(--primary-color)" || props?.packageId == 'basic' && "var(--primary-color-basic)"};;
-color: ${(props) => props?.packageId == 'free' && "var(--primary-color)" || props?.packageId == 'basic' && "var(--primary-color-basic)"};;
+border: 1px solid ${(props) => props?.packageId == 'free' && "var(--primary-color)" || props?.packageId == 'basic' && "var(--primary-color-basic)" || props?.packageId == "pro" && "var(--primary-color-pro)"};
+color: ${(props) => props?.packageId == 'free' && "var(--primary-color)" || props?.packageId == 'basic' && "var(--primary-color-basic)" || props?.packageId == "pro" && "var(--primary-color-pro)"};
 font-size: 11px;
 display: flex;
 flex-direction: row;
@@ -224,10 +224,10 @@ flex-direction: column;
 export const SubmitButton = styled.button`
   background-color: ${(props) =>
     props?.packageId == 'free'
-      ? "var(--primary-color)"
-      : props?.packageId == 'basic'
-      ? "var(--primary-color-basic)"
-      : "#000"};
+    && "var(--primary-color)" ||
+    props?.packageId == 'basic'
+    && "var(--primary-color-basic)"
+    || props?.packageId == "pro" && "var(--primary-color-pro)"};
   border-radius: 8px;
   box-sizing: border-box;
   color: #fff;
@@ -247,10 +247,25 @@ export const SubmitButton = styled.button`
   transform: translateX(-50%);
   &:hover {
     background-color: ${(props) =>
-      props?.packageId == 'free'
-        ? "var(--primary-dark-color)"
-        : props?.packageId == 'basic'
-        ? "var(--primary-dark-color-basic)"
-        : "#333"};
+    props?.packageId == 'free'
+    && "var(--primary-dark-color)" ||
+    props?.packageId == 'basic'
+    && "var(--primary-dark-color-basic)" ||
+    props?.packageId == "pro" && "var(--primary-dark-color-pro)"};
   }
-`;
+`
+
+export const MostPopularBUtton = styled.button`
+    background-color: var(--primary-color-pro);
+    border-radius: 3px;
+    color: #fff;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    padding: 6.5px 8px;
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    border: none;
+`

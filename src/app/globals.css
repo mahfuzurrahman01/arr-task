@@ -5,6 +5,7 @@ body {
   box-sizing: border-box;
   font-family: Rubik, sans-serif;
 }
+
 * {
   box-sizing: border-box;
   font-family: Rubik, sans-serif;
@@ -18,4 +19,8 @@ body {
   --primary-color-basic: #ffb72c;
   --secondary-color-basic: #fff0d9;
   --primary-dark-color-basic: #d69312;
+  --primary-color-pro: #68cb9b;
+  --secondary-color-pro: #d8fdf0;
+  --primary-dark-color-pro: #40a373;
+
 }

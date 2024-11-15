@@ -1,7 +1,8 @@
 import BasicPlan from "@/components/BasicPlan";
 import BillToggle from "@/components/BillToggle";
 import FreePlan from "@/components/FreePlan";
-import { Container, PackageContainer } from "@/Style/style-component";
+import ProPlan from "@/components/ProPlan";
+import { Container, PackageContainer } from "@/Styles/style-component";
 
 export default function Home() {
   return (
@@ -9,8 +10,8 @@ export default function Home() {
       <BillToggle />
       <PackageContainer>
         <FreePlan />
-        <BasicPlan/>
-        <FreePlan />
+        <BasicPlan />
+        <ProPlan />
         <FreePlan />
       </PackageContainer>
     </Container>
