@@ -1,5 +1,5 @@
 "use client"
-import { CustomIcon, FeaturesTitle, List, ListContainer, Marker, MarkerForList, PackageCard, PackageName, PriceText, SubmitButton, Title, ToolTipIcon, TooltipText, TooltipTextList, TooltipWrapper } from '@/Style/style-component';
+import { CustomIcon, FeaturesTitle, List, ListContainer, Marker, MarkerForList, PackageCard, PackageName, PriceText, SubmitButton, Title, TitleContent, ToolTipIcon, TooltipText, TooltipTextList, TooltipWrapper } from '@/Style/style-component';
 import { fetchData, fetchPlansFeature } from '@/utils/GetDataFunc';
 import React, { useEffect, useState } from 'react';
 
@@ -65,40 +65,44 @@ const FreePlan = () => {
 
     return (
         <div>
-            {
-                freePackage?.title && <PackageCard>
+            {freePackage?.title && (
+                <PackageCard packageId="free">
                     <PackageName>{freePackage?.name}</PackageName>
-                    <PriceText>{freePackage?.price}</PriceText>
-                    <Title>{renderTitle(freePackage?.title)}
-                        <ToolTipIcon onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}> <CustomIcon>i</CustomIcon>
-                            <TooltipText active={isHovered}>{freePackage?.text}
+                    <PriceText packageId="free">{freePackage?.price}</PriceText>
+                    <Title packageId="free">
+                        <TitleContent
+                            dangerouslySetInnerHTML={{
+                                __html: freePackage?.title,
+                            }}
+                        />
+                        <ToolTipIcon onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                            <CustomIcon packageId="free">i</CustomIcon>
+                            <TooltipText active={isHovered}>
+                                {freePackage?.text}
                                 <Marker />
                             </TooltipText>
                         </ToolTipIcon>
                     </Title>
-                    <FeaturesTitle>Free includes</FeaturesTitle>
+                    <FeaturesTitle>Free includes:</FeaturesTitle>
                     <ListContainer>
-                        {
-                            features?.map((item, index) => (
-                                <List
-                                    key={index}
-                                    onMouseEnter={() => handleMouseOnList(index)} // Track the hovered index
-                                    onMouseLeave={handleMouseOutList} // Reset on mouse leave
-                                >
-                                    {item?.feature_title}
-                                    {/* Show tooltip only for the hovered item */}
-                                    <TooltipTextList active={hoveredIndex === index}>
-                                        {item?.feature_desc}
-                                        <MarkerForList />
-                                    </TooltipTextList>
-                                </List>
-                            ))
-                        }
+                        {features?.map((item, index) => (
+                            <List
+                                key={index}
+                                onMouseEnter={() => handleMouseOnList(index)} // Track the hovered index
+                                onMouseLeave={handleMouseOutList} // Reset on mouse leave
+                            >
+                                {item?.feature_title}
+                                {/* Show tooltip only for the hovered item */}
+                                <TooltipTextList active={hoveredIndex === index}>
+                                    {item?.feature_desc}
+                                    <MarkerForList />
+                                </TooltipTextList>
+                            </List>
+                        ))}
                     </ListContainer>
-                    <SubmitButton>Select Plan</SubmitButton>
+                    <SubmitButton packageId="free">Select Plan</SubmitButton>
                 </PackageCard>
-            }
+            )}
         </div>
     );
 };

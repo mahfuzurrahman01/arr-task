@@ -61,9 +61,8 @@ export const PackageCard = styled.div`
 background: #fff;
 border: 1px solid #eaeff2;
 border-radius: 8px;
-border-top: 8px solid var(--primary-color);
-display: flex;
-flex-direction: column;
+border-top: 8px solid ${(props) => props?.packageId == "free" && "var(--primary-color)" || props?.packageId == "basic" && "var(--primary-color-basic)"};
+position:relative;
 height: 100%;
 padding: 24px 20px;
 position: relative;
@@ -77,24 +76,24 @@ font-weight: 400;
 margin: 0px;
 `
 export const PriceText = styled.p`
-color: var(--primary-color);
+color: ${(props) => props?.packageId == 'free' && "var(--primary-color)" || props?.packageId == 'basic' && "var(--primary-color-basic)"};
 font-size: 32px;
 font-weight: 600;
 margin: 5px 0px 5px;
 }
 `
-export const Title = styled.div`
-
-background: var(--secondary-color);
+export const Title = styled.button`
+background: ${(props) => props?.packageId == 'free' && "var(--secondary-color)" || props?.packageId == 'basic' && "var(--secondary-color-basic)"};;
 border-radius: 32px;
-color: var(--primary-color);
+color: ${(props) => props?.packageId == 'free' && "var(--primary-color)" || props?.packageId == 'basic' && "var(--primary-color-basic)"};;
 font-size: 12.5px;
 display: flex;
 flex-direction: row;
 justify-content: center;
 align-items: center;
 gap:7px ;
-
+padding:9px 18px;
+border: none;
 `
 
 export const ToolTipIcon = styled.span`
@@ -109,7 +108,7 @@ opacity:  ${(props) => props?.active ? 1 : 0};
 background: #fff;
 border: 1px solid #fff;
 border-radius: 5px;
-bottom: calc(100% + 11px);
+bottom: calc(100% + 6px);
 box-shadow: 0 0 18px 0 rgba(73, 104, 126, .2);
 color: #49687e;
 font-size: 12.5px;
@@ -123,8 +122,8 @@ position: absolute;
 white-space: normal;
 width: calc(100% + 20px);
 word-break: break-word;
+text-align: left;
 z-index: 10;
-
 }  
 `;
 
@@ -142,23 +141,32 @@ font-weight: 500;
 left: 0px;
 right: auto;
 line-height: 1.5 !important;
-min-width: 224px;
+min-width: 100%;
 padding: 5px 10px;
 position: absolute;
 white-space: normal;
-width: calc(100% + 20px);
+width: 100%;
 word-break: break-word;
 z-index: 10;
 }  
 `;
 
-export const CustomIcon = styled.p`
-width: 14px;
-height: 14px;
+export const TitleContent = styled.div`
+ & > img {
+    width: 100%;
+
+    margin-top: 4px;
+    border: none;
+  }
+`
+
+export const CustomIcon = styled.span`
+width: 14.5px;
+height: 14.5px;
 border-radius: 100px;
-border: 1px solid var(--primary-color);
-color: var(--primary-color);
-font-size: 9px;
+border: 1px solid ${(props) => props?.packageId == 'free' && "var(--primary-color)" || props?.packageId == 'basic' && "var(--primary-color-basic)"};;
+color: ${(props) => props?.packageId == 'free' && "var(--primary-color)" || props?.packageId == 'basic' && "var(--primary-color-basic)"};;
+font-size: 11px;
 display: flex;
 flex-direction: row;
 justify-content: center;
@@ -202,11 +210,11 @@ line-height: 1;
 color: #49687e;
 position: relative;
 display: inline;
-
+width: 100%;
 `
 
 export const ListContainer = styled.ul`
-margin: 0px;
+margin: 0px 0px 60px 0px;
 display: flex;
 justify-content: flex-start;
 align-items: flex-start;
@@ -214,22 +222,35 @@ flex-direction: column;
 `
 
 export const SubmitButton = styled.button`
-background-color: var(--primary-color); &:hover { background-color: var(--primary-dark-color); }
-border-radius: 8px;
-box-sizing: border-box;
-color: #fff;
-display: block;
-font-weight: 400;
-line-height: 40px;
-margin-top: auto;
-text-align: center;
-text-decoration: none;
-transition: background-color .3s;
-border: none;
-margin-top: 20px;
-font-size: 16px;
-position: relative;
-bottom: 0px;
-cursor: pointer;
-}
-`
+  background-color: ${(props) =>
+    props?.packageId == 'free'
+      ? "var(--primary-color)"
+      : props?.packageId == 'basic'
+      ? "var(--primary-color-basic)"
+      : "#000"};
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #fff;
+  display: block;
+  font-weight: 400;
+  line-height: 40px;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  border: none;
+  font-size: 16px;
+  position: absolute;
+  bottom: 20px;
+  cursor: pointer;
+  width: 90%;
+  left: 50%;
+  transform: translateX(-50%);
+  &:hover {
+    background-color: ${(props) =>
+      props?.packageId == 'free'
+        ? "var(--primary-dark-color)"
+        : props?.packageId == 'basic'
+        ? "var(--primary-dark-color-basic)"
+        : "#333"};
+  }
+`;

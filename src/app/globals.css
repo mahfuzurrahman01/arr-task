@@ -15,4 +15,7 @@ body {
   --primary-color: #4cb3fd;
   --secondary-color: #e5f2ff;
   --primary-dark-color: #1884d1;
+  --primary-color-basic: #ffb72c;
+  --secondary-color-basic: #fff0d9;
+  --primary-dark-color-basic: #d69312;
 }
