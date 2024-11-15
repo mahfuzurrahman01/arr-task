@@ -1,23 +1,35 @@
 "use client"
-import { Marker, PackageCard, PackageName, PriceText, Title, ToolTipIcon, TooltipText, TooltipWrapper } from '@/Style/style-component';
-import { fetchData } from '@/utils/GetDataFunc';
+import { CustomIcon, FeaturesTitle, List, ListContainer, Marker, MarkerForList, PackageCard, PackageName, PriceText, SubmitButton, Title, ToolTipIcon, TooltipText, TooltipTextList, TooltipWrapper } from '@/Style/style-component';
+import { fetchData, fetchPlansFeature } from '@/utils/GetDataFunc';
 import React, { useEffect, useState } from 'react';
+
 const FreePlan = () => {
     // ========================== store where we are storing our all data from json file =====================
 
     const [freePackage, setFreePackage] = useState({});
+    const [features, setFeatures] = useState([]);
+    const [hoveredIndex, setHoveredIndex] = useState(null); // Track the hovered list item index
 
     const getData = async () => {
         const result = await fetchData("Free");
-        console.log(result)
         setFreePackage(result);
     }
+
+    const getFeature = async () => {
+        const result = await fetchPlansFeature("0");
+        console.log(result)
+        setFeatures(result);
+    }
+
     // ============= with the help of this use effect we will fetch the data for the first render ============
+
     useEffect(() => {
-        getData()
+        getData();
+        getFeature();
     }, []);
 
     // ============ rendering the title as we are getting <strong> html tag from our api response ==============
+
     const renderTitle = (title) => {
         const parts = title?.split(/(<strong>.*?<\/strong>)/g) || [];
         return parts.map((part, index) =>
@@ -41,6 +53,16 @@ const FreePlan = () => {
         setIsHovered(false);
     }
 
+    // =================== mouse hover on feature =====================
+
+    const handleMouseOnList = (index) => {
+        setHoveredIndex(index); // Set the hovered item index
+    };
+
+    const handleMouseOutList = () => {
+        setHoveredIndex(null); // Reset the hovered item index
+    }
+
     return (
         <div>
             {
@@ -49,16 +71,32 @@ const FreePlan = () => {
                     <PriceText>{freePackage?.price}</PriceText>
                     <Title>{renderTitle(freePackage?.title)}
                         <ToolTipIcon onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clipPath="url(#clip0_615_3319)"><path d="M8.00016 14.6668C11.6821 14.6668 14.6668 11.6821 14.6668 8.00016C14.6668 4.31826 11.6821 1.3335 8.00016 1.3335C4.31826 1.3335 1.3335 4.31826 1.3335 8.00016C1.3335 11.6821 4.31826 14.6668 8.00016 14.6668Z" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round"></path><path d="M8 10.6667V8" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round"></path><path d="M8 5.3335H8.00667" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round"></path></g><defs><clipPath id="clip0_615_3319"><rect width="16" height="16" fill="white"></rect></clipPath></defs></svg>
+                            onMouseLeave={handleMouseLeave}> <CustomIcon>i</CustomIcon>
                             <TooltipText active={isHovered}>{freePackage?.text}
                                 <Marker />
                             </TooltipText>
                         </ToolTipIcon>
-
-
                     </Title>
-
+                    <FeaturesTitle>Free includes</FeaturesTitle>
+                    <ListContainer>
+                        {
+                            features?.map((item, index) => (
+                                <List
+                                    key={index}
+                                    onMouseEnter={() => handleMouseOnList(index)} // Track the hovered index
+                                    onMouseLeave={handleMouseOutList} // Reset on mouse leave
+                                >
+                                    {item?.feature_title}
+                                    {/* Show tooltip only for the hovered item */}
+                                    <TooltipTextList active={hoveredIndex === index}>
+                                        {item?.feature_desc}
+                                        <MarkerForList />
+                                    </TooltipTextList>
+                                </List>
+                            ))
+                        }
+                    </ListContainer>
+                    <SubmitButton>Select Plan</SubmitButton>
                 </PackageCard>
             }
         </div>
