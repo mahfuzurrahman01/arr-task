@@ -102,6 +102,7 @@ const BasicPlan = () => {
     const addNewPlan = (item) => {
         console.log(item)
         setBasicPlan(item);
+        setDropdownState(false)
     }
 
 

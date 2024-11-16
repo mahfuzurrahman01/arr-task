@@ -102,6 +102,7 @@ const GrowthPlan = () => {
     const addNewPlan = (item) => {
         console.log(item)
         setGrowthPlan(item);
+        setDropdownState(false)
     }
 
 

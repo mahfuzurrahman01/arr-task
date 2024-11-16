@@ -102,6 +102,7 @@ const FreePlan = () => {
     const addNewPlan = (item) => {
         console.log(item)
         setFreePlan(item);
+        setDropdownState(false)
     }
 
 

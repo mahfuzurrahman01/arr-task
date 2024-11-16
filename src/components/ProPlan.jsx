@@ -75,33 +75,34 @@ const ProPlan = () => {
     }
 
     //===============this ref and use effect will trigger for dropdown close ================
-  
+
     const dropdownContainerRef = useRef(null);
     const dropdownListRef = useRef(null);
-  
+
     useEffect(() => {
-      function handleOutsideClick(event) {
-        if (
-          dropdownContainerRef.current &&
-          dropdownListRef.current &&
-          !dropdownContainerRef.current.contains(event.target) &&
-          !dropdownListRef.current.contains(event.target)
-        ) {
-          setDropdownState(false);
+        function handleOutsideClick(event) {
+            if (
+                dropdownContainerRef.current &&
+                dropdownListRef.current &&
+                !dropdownContainerRef.current.contains(event.target) &&
+                !dropdownListRef.current.contains(event.target)
+            ) {
+                setDropdownState(false);
+            }
         }
-      }
-  
-      document.addEventListener("mousedown", handleOutsideClick);
-  
-      return () => {
-        document.removeEventListener("mousedown", handleOutsideClick);
-      };
+
+        document.addEventListener("mousedown", handleOutsideClick);
+
+        return () => {
+            document.removeEventListener("mousedown", handleOutsideClick);
+        };
     }, []);
 
 
     const addNewPlan = (item) => {
         console.log(item)
         setProPlan(item);
+        setDropdownState(false)
     }
 
 
