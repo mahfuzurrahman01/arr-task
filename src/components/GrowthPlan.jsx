@@ -1,29 +1,32 @@
 "use client"
-import { CustomIcon, FeaturesTitle, List, ListContainer, Marker, MarkerForList, PackageCard, PackageName, PriceText, SubmitButton, Title, TitleContent, ToolTipIcon, TooltipText, TooltipTextList, TooltipWrapper } from '@/Styles/style-component';
+import { ArrowIcon, CustomIcon, DropDown, DropDownContainer, DropdownList, FeaturesTitle, List, ListContainer, ListItem, Marker, MarkerForList, PackageCard, PackageName, PriceText, SubmitButton, Title, TitleContent, ToolTipIcon, TooltipText, TooltipTextList, TooltipWrapper } from '@/Styles/style-component';
 import { fetchData, fetchPlansFeature } from '@/utils/GetDataFunc';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const GrowthPlan = () => {
     // ========================== store where we are storing our all data from json file =====================
-
+    const [allGrowthPlan, setAllGrowthPlan] = useState([]);
     const [growthPlan, setGrowthPlan] = useState({});
+
     const [features, setFeatures] = useState([]);
     const [hoveredIndex, setHoveredIndex] = useState(null); // Track the hovered list item index
     const [loader, setLoader] = useState(true);
+    const [dropdownState, setDropdownState] = useState(false);
 
     const getData = async () => {
         const result = await fetchData("Growth");
-        setGrowthPlan(result);
+        console.log("growth filter result", result[0]);
+        const initialPlan = result[0];
+        setAllGrowthPlan(result);
+        setGrowthPlan(initialPlan);
         getFeature();
     }
 
     const getFeature = async () => {
         const result = await fetchPlansFeature("1");
-        console.log(result)
+        // console.log(result)
         setFeatures(result);
     }
-
-
 
     // ============= with the help of this use effect we will fetch the data for the first render ============
 
@@ -71,25 +74,72 @@ const GrowthPlan = () => {
         setHoveredIndex(null); // Reset the hovered item index
     }
 
+    //===============this ref and use effect will trigger for dropdown close ================
+  
+    const dropdownContainerRef = useRef(null);
+    const dropdownListRef = useRef(null);
+  
+    useEffect(() => {
+      function handleOutsideClick(event) {
+        if (
+          dropdownContainerRef.current &&
+          dropdownListRef.current &&
+          !dropdownContainerRef.current.contains(event.target) &&
+          !dropdownListRef.current.contains(event.target)
+        ) {
+          setDropdownState(false);
+        }
+      }
+  
+      document.addEventListener("mousedown", handleOutsideClick);
+  
+      return () => {
+        document.removeEventListener("mousedown", handleOutsideClick);
+      };
+    }, []);
+
+
+    const addNewPlan = (item) => {
+        console.log(item)
+        setGrowthPlan(item);
+    }
+
+
     return (
         <div>
             {
                 growthPlan?.title && !loader && <PackageCard packageId="growth">
                     <PackageName>{growthPlan?.name}</PackageName>
                     <PriceText packageId="growth">{growthPlan?.price}</PriceText>
-                    <Title packageId="growth">
-                        <TitleContent
-                            dangerouslySetInnerHTML={{
-                                __html: growthPlan?.title,
-                            }}
-                        />
-                        <ToolTipIcon onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}> <CustomIcon packageId="growth">i</CustomIcon>
-                            <TooltipText active={isHovered}>{growthPlan?.text}
-                                <Marker />
-                            </TooltipText>
-                        </ToolTipIcon>
-                    </Title>
+                    {
+                        growthPlan?.length == 1 ? <Title packageId="growth">
+                            <TitleContent
+                                dangerouslySetInnerHTML={{
+                                    __html: growthPlan?.title,
+                                }}
+                            />
+                            <ToolTipIcon onMouseEnter={handleMouseEnter}
+                                onMouseLeave={handleMouseLeave}> <CustomIcon packageId="growth">i</CustomIcon>
+                                <TooltipText active={isHovered}>{growthPlan[0]?.text}
+                                    <Marker />
+                                </TooltipText>
+                            </ToolTipIcon>
+                        </Title> : <DropDownContainer ref={dropdownContainerRef} packageId="growth">
+                            <DropDown packageId="growth" onClick={() => setDropdownState(!dropdownState)}>
+                                {growthPlan?.title.replace(/<\/?strong>/g, '').split('/')[0]}...
+                                <ArrowIcon active={dropdownState}></ArrowIcon>
+                            </DropDown>
+                            <CustomIcon packageId="growth">i</CustomIcon>
+
+                        </DropDownContainer>
+                    }
+                    {
+                        <DropdownList ref={dropdownListRef} active={dropdownState}>
+                            {
+                                allGrowthPlan?.map((item) => <ListItem onClick={() => addNewPlan(item)} active={growthPlan?.price == item?.price} packageId="growth" key={item?.title}>{item?.title.replace(/<\/?strong>/g, '')}</ListItem>)
+                            }
+                        </DropdownList>
+                    }
                     <FeaturesTitle>Everything in free plus:</FeaturesTitle>
                     <ListContainer>
                         {
@@ -114,6 +164,7 @@ const GrowthPlan = () => {
                         }
                     </ListContainer>
                     <SubmitButton packageId="growth">Select Plan</SubmitButton>
+
                 </PackageCard>
             }
         </div>
