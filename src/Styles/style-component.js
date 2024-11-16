@@ -56,12 +56,17 @@ padding: 0;
 margin-top: 16px;
 margin-left: auto;
 margin-right: auto;
+box-sizing: border-box;
 `
 export const PackageCard = styled.div`
 background: #fff;
 border: 1px solid #eaeff2;
 border-radius: 8px;
-border-top: 8px solid ${(props) => props?.packageId == "free" && "var(--primary-color)" || props?.packageId == "basic" && "var(--primary-color-basic)" || props?.packageId == "pro" && "var(--primary-color-pro)"};
+border-top: 8px solid ${(props) => props?.packageId == "free" && "var(--primary-color)"
+    || props?.packageId == "basic" && "var(--primary-color-basic)"
+    || props?.packageId == "pro" && "var(--primary-color-pro)"
+    || props?.packageId == "growth" && "var(--primary-color-growth)"
+  };
 position:relative;
 height: 100%;
 padding: 24px 20px;
@@ -76,16 +81,28 @@ font-weight: 400;
 margin: 0px;
 `
 export const PriceText = styled.p`
-color: ${(props) => props?.packageId == 'free' && "var(--primary-color)" || props?.packageId == 'basic' && "var(--primary-color-basic)" || props?.packageId == "pro" && "var(--primary-color-pro)"};
+color: ${(props) => props?.packageId == 'free' && "var(--primary-color)"
+    || props?.packageId == 'basic' && "var(--primary-color-basic)"
+    || props?.packageId == "pro" && "var(--primary-color-pro)"
+    || props?.packageId == "growth" && "var(--primary-color-growth)"
+  };
 font-size: 32px;
 font-weight: 600;
 margin: 5px 0px 5px;
 }
 `
 export const Title = styled.button`
-background: ${(props) => props?.packageId == 'free' && "var(--secondary-color)" || props?.packageId == 'basic' && "var(--secondary-color-basic)" || props?.packageId == "pro" && "var(--secondary-color-pro)"};;
+background: ${(props) => props?.packageId == 'free' && "var(--secondary-color)"
+    || props?.packageId == 'basic' && "var(--secondary-color-basic)"
+    || props?.packageId == "pro" && "var(--secondary-color-pro)"
+    || props?.packageId == "growth" && "var(--secondary-color-growth)"
+  };
 border-radius: 32px;
-color: ${(props) => props?.packageId == 'free' && "var(--primary-color)" || props?.packageId == 'basic' && "var(--primary-color-basic)" || props?.packageId == "pro" && "var(--primary-color-pro)"};;
+color: ${(props) => props?.packageId == 'free' && "var(--primary-color)"
+    || props?.packageId == 'basic' && "var(--primary-color-basic)"
+    || props?.packageId == "pro" && "var(--primary-color-pro)"
+    || props?.packageId == "growth" && "var(--primary-color-growth)"
+  };
 font-size: 12.5px;
 display: flex;
 flex-direction: row;
@@ -164,8 +181,16 @@ export const CustomIcon = styled.span`
 width: 14.5px;
 height: 14.5px;
 border-radius: 100px;
-border: 1px solid ${(props) => props?.packageId == 'free' && "var(--primary-color)" || props?.packageId == 'basic' && "var(--primary-color-basic)" || props?.packageId == "pro" && "var(--primary-color-pro)"};
-color: ${(props) => props?.packageId == 'free' && "var(--primary-color)" || props?.packageId == 'basic' && "var(--primary-color-basic)" || props?.packageId == "pro" && "var(--primary-color-pro)"};
+border: 1px solid ${(props) => props?.packageId == 'free' && "var(--primary-color)"
+    || props?.packageId == 'basic' && "var(--primary-color-basic)"
+    || props?.packageId == "pro" && "var(--primary-color-pro)"
+    || props?.packageId == "growth" && "var(--primary-color-growth)"
+  };
+color: ${(props) => props?.packageId == 'free' && "var(--primary-color)"
+    || props?.packageId == 'basic' && "var(--primary-color-basic)"
+    || props?.packageId == "pro" && "var(--primary-color-pro)"
+    || props?.packageId == "growth" && "var(--primary-color-growth)"
+  };
 font-size: 11px;
 display: flex;
 flex-direction: row;
@@ -224,10 +249,11 @@ flex-direction: column;
 export const SubmitButton = styled.button`
   background-color: ${(props) =>
     props?.packageId == 'free'
-    && "var(--primary-color)" ||
-    props?.packageId == 'basic'
-    && "var(--primary-color-basic)"
-    || props?.packageId == "pro" && "var(--primary-color-pro)"};
+    && "var(--primary-color)"
+    || props?.packageId == 'basic' && "var(--primary-color-basic)"
+    || props?.packageId == "pro" && "var(--primary-color-pro)"
+    || props?.packageId == "growth" && "var(--primary-color-growth)"
+  };
   border-radius: 8px;
   box-sizing: border-box;
   color: #fff;
@@ -254,7 +280,6 @@ export const SubmitButton = styled.button`
     props?.packageId == "pro" && "var(--primary-dark-color-pro)"};
   }
 `
-
 export const MostPopularBUtton = styled.button`
     background-color: var(--primary-color-pro);
     border-radius: 3px;

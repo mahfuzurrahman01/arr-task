@@ -22,5 +22,7 @@ body {
   --primary-color-pro: #68cb9b;
   --secondary-color-pro: #d8fdf0;
   --primary-dark-color-pro: #40a373;
-
+  --primary-color-growth: #b78deb;
+  --secondary-color-growth: #f7f5fb;
+  --primary-dark-color-growth: #6e41a6;
 }
