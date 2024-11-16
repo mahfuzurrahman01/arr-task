@@ -112,7 +112,7 @@ const GrowthPlan = () => {
                     <PackageName>{growthPlan?.name}</PackageName>
                     <PriceText packageId="growth">{growthPlan?.price}</PriceText>
                     {
-                        growthPlan?.length == 1 ? <Title packageId="growth">
+                        allGrowthPlan?.length == 1 ? <Title packageId="growth">
                             <TitleContent
                                 dangerouslySetInnerHTML={{
                                     __html: growthPlan?.title,
@@ -120,7 +120,7 @@ const GrowthPlan = () => {
                             />
                             <ToolTipIcon onMouseEnter={handleMouseEnter}
                                 onMouseLeave={handleMouseLeave}> <CustomIcon packageId="growth">i</CustomIcon>
-                                <TooltipText active={isHovered}>{growthPlan[0]?.text}
+                                <TooltipText active={isHovered}>{growthPlan?.text}
                                     <Marker />
                                 </TooltipText>
                             </ToolTipIcon>
@@ -129,7 +129,12 @@ const GrowthPlan = () => {
                                 {growthPlan?.title.replace(/<\/?strong>/g, '').split('/')[0]}...
                                 <ArrowIcon active={dropdownState}></ArrowIcon>
                             </DropDown>
-                            <CustomIcon packageId="growth">i</CustomIcon>
+                            <ToolTipIcon onMouseEnter={handleMouseEnter}
+                                onMouseLeave={handleMouseLeave}> <CustomIcon packageId="growth">i</CustomIcon>
+                                <TooltipText active={isHovered}>{growthPlan?.text}
+                                    <Marker />
+                                </TooltipText>
+                            </ToolTipIcon>
 
                         </DropDownContainer>
                     }
