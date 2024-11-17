@@ -1,5 +1,5 @@
 
-# Arraytics Task
+# Problem 1 : Create UI with react, redux, styled Component
 
 ## 📊 Pricing Table UI
 
