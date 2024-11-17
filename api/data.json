@@ -207,58 +207,6 @@
                     "price_id": "#16"
                 }
             }
-        },
-        {
-            "name": "Growth",
-            "price": "$399",
-            "title": "Up to <strong>2,000,000</strong> visitors/month ",
-            "text": "The total number of unique visitors who can view Chaty on your website each month. The visitors' counter resets once every month",
-            "details": {
-                "1_year": {
-                    "price": "$399",
-                    "price_postfix": "/Month",
-                    "plan_type": "Billed monthly",
-                    "plan_info": "",
-                    "dd_text": "Billed monthly",
-                    "btn_text": "Buy now",
-                    "price_id": "#15"
-                },
-                "2_year": {
-                    "price": "$333",
-                    "price_postfix": "/Month",
-                    "plan_type": "Billed annually",
-                    "plan_info": "Save $",
-                    "dd_text": "Billed annually",
-                    "btn_text": "Buy now",
-                    "price_id": "#16"
-                }
-            }
-        },
-        {
-            "name": "Growth",
-            "price": "$399",
-            "title": "Up to <strong>2,000,000</strong> visitors/month ",
-            "text": "The total number of unique visitors who can view Chaty on your website each month. The visitors' counter resets once every month",
-            "details": {
-                "1_year": {
-                    "price": "$399",
-                    "price_postfix": "/Month",
-                    "plan_type": "Billed monthly",
-                    "plan_info": "",
-                    "dd_text": "Billed monthly",
-                    "btn_text": "Buy now",
-                    "price_id": "#15"
-                },
-                "2_year": {
-                    "price": "$333",
-                    "price_postfix": "/Month",
-                    "plan_type": "Billed annually",
-                    "plan_info": "Save $",
-                    "dd_text": "Billed annually",
-                    "btn_text": "Buy now",
-                    "price_id": "#16"
-                }
-            }
         }
     ],
     "plansInfo": {
