@@ -4,11 +4,11 @@ import { ArrowIcon, CustomIcon, DropDown, DropDownContainer, DropdownList, Featu
 import { fetchData, fetchPlansFeature } from '@/utils/GetDataFunc';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addAllProPlan,  addProFeatures } from '../../Redux/actions/planAction';
+import { addAllProPlan, addProFeatures } from '../../Redux/actions/planAction';
 import { getRefinedFeatureList } from '@/utils/component-utils/reusedFunc';
 
 const ProPlan = () => {
-    // ========================== store where we are storing our all data from json file =====================
+    //  
     const [proPlan, setProPlan] = useState({})
     const [hoveredIndex, setHoveredIndex] = useState(null); // Track the hovered list item index
     const [loader, setLoader] = useState(true);
@@ -33,7 +33,7 @@ const ProPlan = () => {
         setLoader(false);
     }
 
-   
+
     // ============= with the help of this use effect we will fetch the data for the first render ============
 
     useEffect(() => {
@@ -53,7 +53,7 @@ const ProPlan = () => {
     // ==================== mouse hover pointer for tooltip ==============
 
     const [isHovered, setIsHovered] = useState(false);
-
+    const [tempHover, setTempHover] = useState(false);
     const handleMouseEnter = () => {
         setIsHovered(true);
     };
@@ -64,13 +64,23 @@ const ProPlan = () => {
 
     // =================== mouse hover on feature =====================
 
-    const handleMouseOnList = (index) => {
-        setHoveredIndex(index); // Set the hovered item index
+    const handleMouseOnList = (index, purpose) => {
+        if (purpose == 'feature') {
+            setHoveredIndex(index);
+
+        } else if (purpose == 'dropdown') {
+            setTempHover(true)
+        }
     };
 
-    const handleMouseOutList = () => {
-        setHoveredIndex(null); // Reset the hovered item index
+    const handleMouseOutList = (purpose) => {
+        if (purpose == 'feature') {
+            setHoveredIndex(null);
+        } else if (purpose == 'dropdown') {
+            setTempHover(false)
+        }
     }
+
 
     //===============this ref and use effect will trigger for dropdown close ================
 
@@ -144,7 +154,14 @@ const ProPlan = () => {
                     {
                         <DropdownList ref={dropdownListRef} active={dropdownState}>
                             {
-                                allProPlan?.map((item) => <ListItem onClick={() => addNewPlan(item)} active={proPlan?.price == item?.price} packageId="pro" key={item?.title}>{item?.title.replace(/<\/?strong>/g, '')}</ListItem>)
+                                allProPlan?.map((item, index) => <ListItem
+                                    onClick={() => addNewPlan(item)}
+                                    active={proPlan?.price == item?.price && !tempHover}
+                                    packageId="pro"
+                                    key={index}
+                                    onMouseEnter={() => handleMouseOnList(index, 'dropdown')}
+                                    onMouseLeave={() => handleMouseOutList('dropdown')}
+                                >{item?.title.replace(/<\/?strong>/g, '')}</ListItem>)
                             }
                         </DropdownList>
                     }
@@ -154,11 +171,11 @@ const ProPlan = () => {
                             features?.map((item, index) => (
                                 <List
                                     key={index}
-                                    onMouseEnter={() => handleMouseOnList(index)} // Track the hovered index
-                                    onMouseLeave={handleMouseOutList} // Reset on mouse leave
+                                    onMouseEnter={() => handleMouseOnList(index, 'feature')}
+                                    onMouseLeave={() => handleMouseOutList('feature')}
                                 >
                                     {item?.feature_title}
-                                    {/* Show tooltip only for the hovered item */}
+                                    {/*  ======= Show tooltip only for the hovered item =========== */}
                                     <TooltipTextList active={hoveredIndex === index}>
                                         <TitleContent
                                             dangerouslySetInnerHTML={{

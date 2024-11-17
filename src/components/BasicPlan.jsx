@@ -8,7 +8,7 @@ import { addAllBasicPlan, addBasicFeatures } from '../../Redux/actions/planActio
 import { getRefinedFeatureList } from '@/utils/component-utils/reusedFunc';
 
 const BasicPlan = () => {
-    // ========================== store where we are storing our all data from json file =====================
+    //  
     const [basicPlan, setBasicPlan] = useState({})
     const [hoveredIndex, setHoveredIndex] = useState(null); // Track the hovered list item index
     const [loader, setLoader] = useState(true);
@@ -54,6 +54,7 @@ const BasicPlan = () => {
 
     const [isHovered, setIsHovered] = useState(false);
 
+    const [tempHover, setTempHover] = useState(false);
     const handleMouseEnter = () => {
         setIsHovered(true);
     };
@@ -64,13 +65,23 @@ const BasicPlan = () => {
 
     // =================== mouse hover on feature =====================
 
-    const handleMouseOnList = (index) => {
-        setHoveredIndex(index); // Set the hovered item index
+    const handleMouseOnList = (index, purpose) => {
+        if (purpose == 'feature') {
+            setHoveredIndex(index);
+
+        } else if (purpose == 'dropdown') {
+            setTempHover(true)
+        }
     };
 
-    const handleMouseOutList = () => {
-        setHoveredIndex(null); // Reset the hovered item index
+    const handleMouseOutList = (purpose) => {
+        if (purpose == 'feature') {
+            setHoveredIndex(null);
+        } else if (purpose == 'dropdown') {
+            setTempHover(false)
+        }
     }
+
 
     //===============this ref and use effect will trigger for dropdown close ================
 
@@ -144,7 +155,14 @@ const BasicPlan = () => {
                     {
                         <DropdownList ref={dropdownListRef} active={dropdownState}>
                             {
-                                allBasicPlan?.map((item) => <ListItem onClick={() => addNewPlan(item)} active={basicPlan?.price == item?.price} packageId="basic" key={item?.title}>{item?.title.replace(/<\/?strong>/g, '')}</ListItem>)
+                                allBasicPlan?.map((item, index) => <ListItem
+                                    onClick={() => addNewPlan(item)}
+                                    active={basicPlan?.price == item?.price && !tempHover}
+                                    packageId="basic"
+                                    key={index}
+                                    onMouseEnter={() => handleMouseOnList(index, 'dropdown')}
+                                    onMouseLeave={() => handleMouseOutList('dropdown')}
+                                >{item?.title.replace(/<\/?strong>/g, '')}</ListItem>)
                             }
                         </DropdownList>
                     }
@@ -154,11 +172,11 @@ const BasicPlan = () => {
                             features?.map((item, index) => (
                                 <List
                                     key={index}
-                                    onMouseEnter={() => handleMouseOnList(index)} // Track the hovered index
-                                    onMouseLeave={handleMouseOutList} // Reset on mouse leave
+                                    onMouseEnter={() => handleMouseOnList(index, 'feature')}
+                                    onMouseLeave={() => handleMouseOutList('feature')}
                                 >
                                     {item?.feature_title}
-                                    {/* Show tooltip only for the hovered item */}
+                                    {/*  ======= Show tooltip only for the hovered item =========== */}
                                     <TooltipTextList active={hoveredIndex === index}>
                                         <TitleContent
                                             dangerouslySetInnerHTML={{
