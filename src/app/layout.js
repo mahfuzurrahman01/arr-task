@@ -1,5 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
+import ReduxProvider from "../../Redux/provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,7 +28,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body cz-shortcut-listen="true">
-        {children}
+        <ReduxProvider>{children}</ReduxProvider>
       </body>
     </html>
   );

@@ -1,56 +1,54 @@
 "use client"
 import { ArrowIcon, CustomIcon, DropDown, DropDownContainer, DropdownList, FeaturesTitle, List, ListContainer, ListItem, Marker, MarkerForList, PackageCard, PackageName, PriceText, SubmitButton, Title, TitleContent, ToolTipIcon, TooltipText, TooltipTextList, TooltipWrapper } from '@/Styles/style-component';
+
 import { fetchData, fetchPlansFeature } from '@/utils/GetDataFunc';
 import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addAllGrowthPlan, addGrowthFeatures } from '../../Redux/actions/planAction';
+import { getRefinedFeatureList } from '@/utils/component-utils/reusedFunc';
 
 const GrowthPlan = () => {
     // ========================== store where we are storing our all data from json file =====================
-    const [allGrowthPlan, setAllGrowthPlan] = useState([]);
-    const [growthPlan, setGrowthPlan] = useState({});
-
-    const [features, setFeatures] = useState([]);
+    const [growthPlan, setGrowthPlan] = useState({})
     const [hoveredIndex, setHoveredIndex] = useState(null); // Track the hovered list item index
     const [loader, setLoader] = useState(true);
     const [dropdownState, setDropdownState] = useState(false);
+    const dispatch = useDispatch();
+    const store = useSelector((state) => state?.plan);
+    const allGrowthPlan = store?.growthPlan;
+    const features = store?.growthFeatures;
 
-    const getData = async () => {
+    const getDataForGrowthPlan = async () => {
         const result = await fetchData("Growth");
-        console.log("growth filter result", result[0]);
+        // =============adding to store ============
+        dispatch(addAllGrowthPlan(result));
         const initialPlan = result[0];
-        setAllGrowthPlan(result);
         setGrowthPlan(initialPlan);
-        getFeature();
     }
 
     const getFeature = async () => {
-        const result = await fetchPlansFeature("1");
-        // console.log(result)
-        setFeatures(result);
+        const featureArr = await fetchPlansFeature("1");
+        const newArr = getRefinedFeatureList(growthPlan, featureArr);
+        dispatch(addGrowthFeatures(newArr));
+        setLoader(false);
     }
 
+   
     // ============= with the help of this use effect we will fetch the data for the first render ============
 
     useEffect(() => {
-        getData();
+        getDataForGrowthPlan();
     }, []);
 
-    //  ============ as we have to add first feature dynamically so we will trigger this useEffect ===========
-
     useEffect(() => {
-        if (growthPlan?.title && features?.length > 0) {
-            const growthPlanTitle = growthPlan?.title;
-            const growthPlanText = growthPlan?.text;
-            const refinedTitle = growthPlanTitle.replace(/<\/?strong>/g, '');
-            // ========== new body for the feature =========
-            const newBody = {
-                is_pro: '1',
-                feature_title: refinedTitle,
-                feature_desc: growthPlanText,
-            }
-            features.unshift(newBody);
+        if (growthPlan?.title) {
+            getFeature();
+        }
+        if (allGrowthPlan > 0 && growthPlan?.title) {
             setLoader(false);
         }
-    }, [features])
+    }, [growthPlan])
+
 
     // ==================== mouse hover pointer for tooltip ==============
 
@@ -75,33 +73,32 @@ const GrowthPlan = () => {
     }
 
     //===============this ref and use effect will trigger for dropdown close ================
-  
+
     const dropdownContainerRef = useRef(null);
     const dropdownListRef = useRef(null);
-  
+
     useEffect(() => {
-      function handleOutsideClick(event) {
-        if (
-          dropdownContainerRef.current &&
-          dropdownListRef.current &&
-          !dropdownContainerRef.current.contains(event.target) &&
-          !dropdownListRef.current.contains(event.target)
-        ) {
-          setDropdownState(false);
+        function handleOutsideClick(event) {
+            if (
+                dropdownContainerRef.current &&
+                dropdownListRef.current &&
+                !dropdownContainerRef.current.contains(event.target) &&
+                !dropdownListRef.current.contains(event.target)
+            ) {
+                setDropdownState(false);
+            }
         }
-      }
-  
-      document.addEventListener("mousedown", handleOutsideClick);
-  
-      return () => {
-        document.removeEventListener("mousedown", handleOutsideClick);
-      };
+
+        document.addEventListener("mousedown", handleOutsideClick);
+
+        return () => {
+            document.removeEventListener("mousedown", handleOutsideClick);
+        };
     }, []);
 
 
     const addNewPlan = (item) => {
-        console.log(item)
-        setGrowthPlan(item);
+        setGrowthPlan(item)
         setDropdownState(false)
     }
 
