@@ -88,8 +88,27 @@ color: ${(props) => props?.packageId == 'free' && "var(--primary-color)"
   };
 font-size: 32px;
 font-weight: 600;
-margin: 5px 0px 5px;
+margin: 12px 0px;
+position: relative;
+
 }
+`
+export const Prefix = styled.span`
+color: #83a1b7;
+font-size: 14px;
+font-weight: 400;
+margin-left: 5px;
+`
+export const SupPrice = styled.span`
+color: #ff424d;
+font-size: 12px;
+font-weight: 400;
+margin-left: 5px;
+position: relative;
+bottom: 17px;
+left: -50px;
+text-decoration: line-through;
+line-height: 1;
 `
 export const Title = styled.button`
 background: ${(props) => props?.packageId == 'free' && "var(--secondary-color)"
@@ -393,14 +412,14 @@ export const ListItem = styled.li`
     // ================ background ==============
     background: ${(props) =>
     props?.packageId == 'free' && props?.active &&
-     "var(--secondary-color)" ||
+    "var(--secondary-color)" ||
     props?.packageId == 'basic'
     && props?.active && "var(--secondary-color-basic)" ||
     props?.packageId == "pro" && props?.active && "var(--secondary-color-pro)" ||
-    props?.packageId == "growth" && props?.active &&"var(--secondary-color-growth)"};
+    props?.packageId == "growth" && props?.active && "var(--secondary-color-growth)"};
     // ================= color ==================
     color: ${(props) =>
-    props?.packageId == 'free' 
+    props?.packageId == 'free'
     && props?.active && "var(--primary-color)" ||
     props?.packageId == 'basic'
     && props?.active && "var(--primary-color-basic)" ||

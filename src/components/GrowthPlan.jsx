@@ -1,5 +1,5 @@
 "use client"
-import { ArrowIcon, CustomIcon, DropDown, DropDownContainer, DropdownList, FeaturesTitle, List, ListContainer, ListItem, Marker, MarkerForList, PackageCard, PackageName, PriceText, SubmitButton, Title, TitleContent, ToolTipIcon, TooltipText, TooltipTextList, TooltipWrapper } from '@/Styles/style-component';
+import { ArrowIcon, CustomIcon, DropDown, DropDownContainer, DropdownList, FeaturesTitle, List, ListContainer, ListItem, Marker, MarkerForList, PackageCard, PackageName, Prefix, PriceText, SubmitButton, SupPrice, Title, TitleContent, ToolTipIcon, TooltipText, TooltipTextList, TooltipWrapper } from '@/Styles/style-component';
 
 import { fetchData, fetchPlansFeature } from '@/utils/GetDataFunc';
 import React, { useEffect, useRef, useState } from 'react';
@@ -17,7 +17,7 @@ const GrowthPlan = () => {
     const store = useSelector((state) => state?.plan);
     const allGrowthPlan = store?.growthPlan;
     const features = store?.growthFeatures;
-
+    const planCycle = store?.value;
     const getDataForGrowthPlan = async () => {
         const result = await fetchData("Growth");
         // =============adding to store ============
@@ -33,7 +33,7 @@ const GrowthPlan = () => {
         setLoader(false);
     }
 
-   
+
     // ============= with the help of this use effect we will fetch the data for the first render ============
 
     useEffect(() => {
@@ -48,7 +48,6 @@ const GrowthPlan = () => {
             setLoader(false);
         }
     }, [growthPlan])
-
 
     // ==================== mouse hover pointer for tooltip ==============
 
@@ -108,7 +107,12 @@ const GrowthPlan = () => {
             {
                 growthPlan?.title && !loader && <PackageCard packageId="growth">
                     <PackageName>{growthPlan?.name}</PackageName>
-                    <PriceText packageId="growth">{growthPlan?.price}</PriceText>
+                    <PriceText packageId="growth">{planCycle == 'monthly' ? growthPlan?.details["1_year"].price : growthPlan?.details["2_year"].price}
+                        <Prefix>{planCycle == 'monthly' ? growthPlan?.details["1_year"].price_postfix : growthPlan?.details["2_year"].price_postfix}</Prefix>
+                        {
+                            planCycle == 'yearly' && <SupPrice>{growthPlan?.details["1_year"].price}{growthPlan?.details["1_year"].price_postfix}</SupPrice>
+                        }
+                    </PriceText>
                     {
                         allGrowthPlan?.length == 1 ? <Title packageId="growth">
                             <TitleContent

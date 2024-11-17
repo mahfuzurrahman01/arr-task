@@ -1,56 +1,54 @@
 "use client"
-import { ArrowIcon, CustomIcon, DropDown, DropDownContainer, DropdownList, FeaturesTitle, List, ListContainer, ListItem, Marker, MarkerForList, PackageCard, PackageName, PriceText, SubmitButton, Title, TitleContent, ToolTipIcon, TooltipText, TooltipTextList, TooltipWrapper } from '@/Styles/style-component';
+import { ArrowIcon, CustomIcon, DropDown, DropDownContainer, DropdownList, FeaturesTitle, List, ListContainer, ListItem, Marker, MarkerForList, PackageCard, PackageName, Prefix, PriceText, SubmitButton, SupPrice, Title, TitleContent, ToolTipIcon, TooltipText, TooltipTextList, TooltipWrapper } from '@/Styles/style-component';
+
 import { fetchData, fetchPlansFeature } from '@/utils/GetDataFunc';
 import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addAllBasicPlan, addBasicFeatures } from '../../Redux/actions/planAction';
+import { getRefinedFeatureList } from '@/utils/component-utils/reusedFunc';
 
 const BasicPlan = () => {
     // ========================== store where we are storing our all data from json file =====================
-    const [allBasicPlan, setAllBasicPlan] = useState([]);
-    const [basicPlan, setBasicPlan] = useState({});
-
-    const [features, setFeatures] = useState([]);
+    const [basicPlan, setBasicPlan] = useState({})
     const [hoveredIndex, setHoveredIndex] = useState(null); // Track the hovered list item index
     const [loader, setLoader] = useState(true);
     const [dropdownState, setDropdownState] = useState(false);
-
-    const getData = async () => {
+    const dispatch = useDispatch();
+    const store = useSelector((state) => state?.plan);
+    const allBasicPlan = store?.basicPlan;
+    const features = store?.basicFeatures;
+    const planCycle = store?.value;
+    const getDataForBasicPlan = async () => {
         const result = await fetchData("Basic");
-        console.log("growth filter result", result[0]);
+        // =============adding to store ============
+        dispatch(addAllBasicPlan(result));
         const initialPlan = result[0];
-        setAllBasicPlan(result);
         setBasicPlan(initialPlan);
-        getFeature();
     }
 
     const getFeature = async () => {
-        const result = await fetchPlansFeature("1");
-        // console.log(result)
-        setFeatures(result);
+        const featureArr = await fetchPlansFeature("1");
+        const newArr = getRefinedFeatureList(basicPlan, featureArr);
+        dispatch(addBasicFeatures(newArr));
+        setLoader(false);
     }
+
 
     // ============= with the help of this use effect we will fetch the data for the first render ============
 
     useEffect(() => {
-        getData();
+        getDataForBasicPlan();
     }, []);
 
-    //  ============ as we have to add first feature dynamically so we will trigger this useEffect ===========
-
     useEffect(() => {
-        if (basicPlan?.title && features?.length > 0) {
-            const basicPlanTitle = basicPlan?.title;
-            const basicPlanText = basicPlan?.text;
-            const refinedTitle = basicPlanTitle.replace(/<\/?strong>/g, '');
-            // ========== new body for the feature =========
-            const newBody = {
-                is_pro: '1',
-                feature_title: refinedTitle,
-                feature_desc: basicPlanText,
-            }
-            features.unshift(newBody);
+        if (basicPlan?.title) {
+            getFeature();
+        }
+        if (allBasicPlan > 0 && basicPlan?.title) {
             setLoader(false);
         }
-    }, [features])
+    }, [basicPlan])
+
 
     // ==================== mouse hover pointer for tooltip ==============
 
@@ -75,33 +73,32 @@ const BasicPlan = () => {
     }
 
     //===============this ref and use effect will trigger for dropdown close ================
-  
+
     const dropdownContainerRef = useRef(null);
     const dropdownListRef = useRef(null);
-  
+
     useEffect(() => {
-      function handleOutsideClick(event) {
-        if (
-          dropdownContainerRef.current &&
-          dropdownListRef.current &&
-          !dropdownContainerRef.current.contains(event.target) &&
-          !dropdownListRef.current.contains(event.target)
-        ) {
-          setDropdownState(false);
+        function handleOutsideClick(event) {
+            if (
+                dropdownContainerRef.current &&
+                dropdownListRef.current &&
+                !dropdownContainerRef.current.contains(event.target) &&
+                !dropdownListRef.current.contains(event.target)
+            ) {
+                setDropdownState(false);
+            }
         }
-      }
-  
-      document.addEventListener("mousedown", handleOutsideClick);
-  
-      return () => {
-        document.removeEventListener("mousedown", handleOutsideClick);
-      };
+
+        document.addEventListener("mousedown", handleOutsideClick);
+
+        return () => {
+            document.removeEventListener("mousedown", handleOutsideClick);
+        };
     }, []);
 
 
     const addNewPlan = (item) => {
-        console.log(item)
-        setBasicPlan(item);
+        setBasicPlan(item)
         setDropdownState(false)
     }
 
@@ -111,7 +108,12 @@ const BasicPlan = () => {
             {
                 basicPlan?.title && !loader && <PackageCard packageId="basic">
                     <PackageName>{basicPlan?.name}</PackageName>
-                    <PriceText packageId="basic">{basicPlan?.price}</PriceText>
+                    <PriceText packageId="basic">{planCycle == 'monthly' ? basicPlan?.details["1_year"].price : basicPlan?.details["2_year"].price}
+                        <Prefix>{planCycle == 'monthly' ? basicPlan?.details["1_year"].price_postfix : basicPlan?.details["2_year"].price_postfix}</Prefix>
+                        {
+                            planCycle == 'yearly' && <SupPrice>{basicPlan?.details["1_year"].price}{basicPlan?.details["1_year"].price_postfix}</SupPrice>
+                        }
+                    </PriceText>
                     {
                         allBasicPlan?.length == 1 ? <Title packageId="basic">
                             <TitleContent
@@ -121,7 +123,7 @@ const BasicPlan = () => {
                             />
                             <ToolTipIcon onMouseEnter={handleMouseEnter}
                                 onMouseLeave={handleMouseLeave}> <CustomIcon packageId="basic">i</CustomIcon>
-                                <TooltipText active={isHovered}>{basicPlan.text}
+                                <TooltipText active={isHovered}>{basicPlan?.text}
                                     <Marker />
                                 </TooltipText>
                             </ToolTipIcon>
@@ -130,7 +132,12 @@ const BasicPlan = () => {
                                 {basicPlan?.title.replace(/<\/?strong>/g, '').split('/')[0]}...
                                 <ArrowIcon active={dropdownState}></ArrowIcon>
                             </DropDown>
-                            <CustomIcon packageId="basic">i</CustomIcon>
+                            <ToolTipIcon onMouseEnter={handleMouseEnter}
+                                onMouseLeave={handleMouseLeave}> <CustomIcon packageId="basic">i</CustomIcon>
+                                <TooltipText active={isHovered}>{basicPlan?.text}
+                                    <Marker />
+                                </TooltipText>
+                            </ToolTipIcon>
 
                         </DropDownContainer>
                     }

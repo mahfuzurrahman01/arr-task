@@ -1,56 +1,54 @@
 "use client"
-import { ArrowIcon, CustomIcon, DropDown, DropDownContainer, DropdownList, FeaturesTitle, List, ListContainer, ListItem, Marker, MarkerForList, PackageCard, PackageName, PriceText, SubmitButton, Title, TitleContent, ToolTipIcon, TooltipText, TooltipTextList, TooltipWrapper } from '@/Styles/style-component';
+import { ArrowIcon, CustomIcon, DropDown, DropDownContainer, DropdownList, FeaturesTitle, List, ListContainer, ListItem, Marker, MarkerForList, PackageCard, PackageName, Prefix, PriceText, SubmitButton, SupPrice, Title, TitleContent, ToolTipIcon, TooltipText, TooltipTextList, TooltipWrapper } from '@/Styles/style-component';
+
 import { fetchData, fetchPlansFeature } from '@/utils/GetDataFunc';
 import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addAllProPlan,  addProFeatures } from '../../Redux/actions/planAction';
+import { getRefinedFeatureList } from '@/utils/component-utils/reusedFunc';
 
 const ProPlan = () => {
     // ========================== store where we are storing our all data from json file =====================
-    const [allProPlan, setAllProPlan] = useState([]);
-    const [proPlan, setProPlan] = useState({});
-
-    const [features, setFeatures] = useState([]);
+    const [proPlan, setProPlan] = useState({})
     const [hoveredIndex, setHoveredIndex] = useState(null); // Track the hovered list item index
     const [loader, setLoader] = useState(true);
     const [dropdownState, setDropdownState] = useState(false);
-
-    const getData = async () => {
+    const dispatch = useDispatch();
+    const store = useSelector((state) => state?.plan);
+    const allProPlan = store?.proPlan;
+    const features = store?.proFeatures;
+    const planCycle = store?.value;
+    const getDataForProPlan = async () => {
         const result = await fetchData("Pro");
-        console.log("growth filter result", result[0]);
+        // =============adding to store ============
+        dispatch(addAllProPlan(result));
         const initialPlan = result[0];
-        setAllProPlan(result);
         setProPlan(initialPlan);
-        getFeature();
     }
 
     const getFeature = async () => {
-        const result = await fetchPlansFeature("1");
-        // console.log(result)
-        setFeatures(result);
+        const featureArr = await fetchPlansFeature("1");
+        const newArr = getRefinedFeatureList(proPlan, featureArr);
+        dispatch(addProFeatures(newArr));
+        setLoader(false);
     }
 
+   
     // ============= with the help of this use effect we will fetch the data for the first render ============
 
     useEffect(() => {
-        getData();
+        getDataForProPlan();
     }, []);
 
-    //  ============ as we have to add first feature dynamically so we will trigger this useEffect ===========
-
     useEffect(() => {
-        if (proPlan?.title && features?.length > 0) {
-            const proPlanTitle = proPlan?.title;
-            const proPlanText = proPlan?.text;
-            const refinedTitle = proPlanTitle.replace(/<\/?strong>/g, '');
-            // ========== new body for the feature =========
-            const newBody = {
-                is_pro: '1',
-                feature_title: refinedTitle,
-                feature_desc: proPlanText,
-            }
-            features.unshift(newBody);
+        if (proPlan?.title) {
+            getFeature();
+        }
+        if (allProPlan > 0 && proPlan?.title) {
             setLoader(false);
         }
-    }, [features])
+    }, [proPlan])
+
 
     // ==================== mouse hover pointer for tooltip ==============
 
@@ -100,8 +98,7 @@ const ProPlan = () => {
 
 
     const addNewPlan = (item) => {
-        console.log(item)
-        setProPlan(item);
+        setProPlan(item)
         setDropdownState(false)
     }
 
@@ -111,7 +108,12 @@ const ProPlan = () => {
             {
                 proPlan?.title && !loader && <PackageCard packageId="pro">
                     <PackageName>{proPlan?.name}</PackageName>
-                    <PriceText packageId="pro">{proPlan?.price}</PriceText>
+                    <PriceText packageId="pro">{planCycle == 'monthly' ? proPlan?.details["1_year"].price : proPlan?.details["2_year"].price}
+                        <Prefix>{planCycle == 'monthly' ? proPlan?.details["1_year"].price_postfix : proPlan?.details["2_year"].price_postfix}</Prefix>
+                        {
+                            planCycle == 'yearly' && <SupPrice>{proPlan?.details["1_year"].price}{proPlan?.details["1_year"].price_postfix}</SupPrice>
+                        }
+                    </PriceText>
                     {
                         allProPlan?.length == 1 ? <Title packageId="pro">
                             <TitleContent
@@ -121,7 +123,7 @@ const ProPlan = () => {
                             />
                             <ToolTipIcon onMouseEnter={handleMouseEnter}
                                 onMouseLeave={handleMouseLeave}> <CustomIcon packageId="pro">i</CustomIcon>
-                                <TooltipText active={isHovered}>{proPlan.text}
+                                <TooltipText active={isHovered}>{proPlan?.text}
                                     <Marker />
                                 </TooltipText>
                             </ToolTipIcon>
@@ -130,7 +132,12 @@ const ProPlan = () => {
                                 {proPlan?.title.replace(/<\/?strong>/g, '').split('/')[0]}...
                                 <ArrowIcon active={dropdownState}></ArrowIcon>
                             </DropDown>
-                            <CustomIcon packageId="pro">i</CustomIcon>
+                            <ToolTipIcon onMouseEnter={handleMouseEnter}
+                                onMouseLeave={handleMouseLeave}> <CustomIcon packageId="pro">i</CustomIcon>
+                                <TooltipText active={isHovered}>{proPlan?.text}
+                                    <Marker />
+                                </TooltipText>
+                            </ToolTipIcon>
 
                         </DropDownContainer>
                     }
