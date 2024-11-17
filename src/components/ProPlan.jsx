@@ -1,11 +1,15 @@
 "use client"
-import { ArrowIcon, CustomIcon, DropDown, DropDownContainer, DropdownList, FeaturesTitle, List, ListContainer, ListItem, Marker, MarkerForList, PackageCard, PackageName, Prefix, PriceText, SubmitButton, SupPrice, Title, TitleContent, ToolTipIcon, TooltipText, TooltipTextList, TooltipWrapper } from '@/Styles/style-component';
 
 import { fetchData, fetchPlansFeature } from '@/utils/GetDataFunc';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAllProPlan, addProFeatures } from '../../Redux/actions/planAction';
 import { getRefinedFeatureList } from '@/utils/component-utils/reusedFunc';
+import { PackageCard, PackageName, Prefix, PriceText, SupPrice, Title } from '@/Styles/packageStyle';
+import { CustomIcon, Marker, MarkerForList, TitleContent, ToolTipIcon, TooltipText, TooltipTextList } from '@/Styles/tooltipStyle';
+import { ArrowIcon, DropDown, DropDownContainer, DropdownList, ListContainer, ListItem } from '@/Styles/dropdownstyle';
+import { FeaturesTitle, List } from '@/Styles/style-component';
+import { SubmitButton } from '@/Styles/ButtonStyle';
 
 const ProPlan = () => {
     //  

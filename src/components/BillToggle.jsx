@@ -1,9 +1,9 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { ToggleButton, ToggleContainer, Divider, OfferButton } from "@/Styles/style-component";
 import { fetchPlansInfo } from '@/utils/GetDataFunc';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMonthlyPlan, setYearlyPlan } from '../../Redux/actions/planAction';
+import { Divider, OfferButton, ToggleButton, ToggleContainer } from '@/Styles/planCycleStyle';
 const BillToggle = () => {
     const [toggleState, setToggleState] = useState(0);
     const [plansInfo, setPlansInfo] = useState({});
