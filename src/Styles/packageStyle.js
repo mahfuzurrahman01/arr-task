@@ -2,35 +2,52 @@
 import styled from "@emotion/styled"
 
 export const PackageContainer = styled.section`
-width: 65%;
-column-gap: 16px;
-display: grid;
-grid-template-columns: repeat(4, 1fr);
-padding: 30px 0;
-row-gap: 16px;
-box-sizing: border-box;
-font-family: Rubik, sans-serif;
-padding: 0;
-margin-top: 16px;
-margin-left: auto;
-margin-right: auto;
-box-sizing: border-box;
-`
+  width: 95%;
+  column-gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr); 
+  padding: 30px 0;
+  row-gap: 16px;
+  box-sizing: border-box;
+  font-family: Rubik, sans-serif;
+
+  margin-left: auto;
+  margin-right: auto;
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+      width: 85%;
+  }
+
+  @media (min-width: 1024px) { /
+    grid-template-columns: repeat(2, 1fr);
+      width: 75%;
+  }
+
+  @media (min-width: 1280px) { 
+    grid-template-columns: repeat(4, 1fr);
+      width: 75%;
+  }
+  @media (min-width: 1680px) { 
+    grid-template-columns: repeat(4, 1fr);
+      width: 60%;
+  }
+`;
+
 export const PackageCard = styled.div`
-background: #fff;
-border: 1px solid #eaeff2;
-border-radius: 8px;
-border-top: 8px solid ${(props) => props?.packageId == "free" && "var(--primary-color)"
-        || props?.packageId == "basic" && "var(--primary-color-basic)"
-        || props?.packageId == "pro" && "var(--primary-color-pro)"
-        || props?.packageId == "growth" && "var(--primary-color-growth)"
-    };
-position:relative;
-height: 100%;
-padding: 24px 20px;
-position: relative;
-transition: all .25s;
-`
+  background: #fff;
+  border: 1px solid #eaeff2;
+  border-radius: 8px;
+  border-top: 8px solid ${(props) =>
+        (props?.packageId === "free" && "var(--primary-color)") ||
+        (props?.packageId === "basic" && "var(--primary-color-basic)") ||
+        (props?.packageId === "pro" && "var(--primary-color-pro)") ||
+        (props?.packageId === "growth" && "var(--primary-color-growth)")};
+  position: relative;
+  height: 100%;
+  padding: 24px 20px;
+  transition: all 0.25s;
+`;
+
 
 export const PackageName = styled.p`
 font-size: 18px;
@@ -88,4 +105,16 @@ align-items: center;
 gap:7px ;
 padding:9px 18px;
 border: none;
+
+@media (min-width: 768px) {
+    padding:9px 18px;
+  }
+
+  @media (min-width: 1024px) { /
+   padding:9px 18px;
+  }
+
+  @media (min-width: 1280px) { 
+    padding:9px 12px;
+  }
 `

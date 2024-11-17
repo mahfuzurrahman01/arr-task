@@ -70,9 +70,9 @@ export const ArrowIcon = styled.span`
 `
 
 export const DropdownList = styled.ul`
-    width: 80%;
+    width: 85%;
     position: absolute;
-    top: 115px;
+    top: 127px;
     background: white;
     border-radius: 10px;
     box-sizing: border-box;
@@ -97,9 +97,9 @@ flex-direction: column;
 
 
 export const ListItem = styled.li`
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 400;
-    padding: 15px 18px;
+    padding: 15px 5px 15px 15px;
     cursor: pointer;
     list-style: none;
     outline: none;
@@ -137,5 +137,12 @@ export const ListItem = styled.li`
         && "var(--primary-color-basic)" ||
         props?.packageId == "pro" && "var(--primary-color-pro)" ||
         props?.packageId == "growth" && "var(--primary-color-growth)"};
+  }
+   @media (min-width: 1024px) { /* Larger screens than tablet: 2 cards */
+    font-size: 12px;
+  }
+
+  @media (min-width: 1580px) { /* Extra large screens: 4 cards */
+    font-size: 13px;
   }
 `
